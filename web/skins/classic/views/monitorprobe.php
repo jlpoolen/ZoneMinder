@@ -287,7 +287,15 @@ $macBases = array(
 );
 
 unset($output);
-$command = "arp -a";
+// Calling arp without the full path was reported to fail on some systems
+// Use the builtin unix command "type" to tell us where the command is
+$command = "type -p arp";
+$result = exec( escapeshellcmd($command), $output, $status );
+if ( $status )
+    Fatal( "Unable determine arp path, status is '$status'" );
+// Now that we know where arp is, call it using the full path
+$command = $output[0]." -a";
+unset($output);
 $result = exec( escapeshellcmd($command), $output, $status );
 if ( $status )
     Fatal( "Unable to probe network cameras, status is '$status'" );
@@ -331,20 +339,20 @@ xhtmlHeaders(__FILE__, $SLANG['MonitorProbe'] );
 <body>
   <div id="page">
     <div id="header">
-      <h2><?= $SLANG['MonitorProbe'] ?></h2>
+      <h2><?php echo $SLANG['MonitorProbe'] ?></h2>
     </div>
     <div id="content">
-      <form name="contentForm" id="contentForm" method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
+      <form name="contentForm" id="contentForm" method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>">
         <input type="hidden" name="view" value="none"/>
-        <input type="hidden" name="mid" value="<?= validNum($_REQUEST['mid']) ?>"/>
+        <input type="hidden" name="mid" value="<?php echo validNum($_REQUEST['mid']) ?>"/>
         <p>
-          <?= $SLANG['MonitorProbeIntro'] ?>
+          <?php echo $SLANG['MonitorProbeIntro'] ?>
         </p>
         <p>
-          <label for="probe"><?= $SLANG['DetectedCameras'] ?></label><?= buildSelect( "probe", $cameras, 'configureButtons( this )' ); ?>
+          <label for="probe"><?php echo $SLANG['DetectedCameras'] ?></label><?php echo buildSelect( "probe", $cameras, 'configureButtons( this )' ); ?>
         </p>
         <div id="contentButtons">
-          <input type="submit" name="saveBtn" value="<?= $SLANG['Save'] ?>" onclick="submitCamera( this )" disabled="disabled"/><input type="button" value="<?= $SLANG['Cancel'] ?>" onclick="closeWindow()"/>
+          <input type="submit" name="saveBtn" value="<?php echo $SLANG['Save'] ?>" onclick="submitCamera( this )" disabled="disabled"/><input type="button" value="<?php echo $SLANG['Cancel'] ?>" onclick="closeWindow()"/>
         </div>
       </form>
     </div>

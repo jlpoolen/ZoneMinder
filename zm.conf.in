@@ -19,7 +19,7 @@ ZM_PATH_BIN=@BINDIR@
 ZM_PATH_LIB=@LIBDIR@
 
 # Path to ZoneMinder configuration (this file only at present)
-ZM_PATH_CONF=@SYSCONFDIR@
+ZM_PATH_CONF=@ZM_CONFIG_DIR@
 
 # Path to ZoneMinder web files
 ZM_PATH_WEB=@WEB_PREFIX@
@@ -31,7 +31,7 @@ ZM_PATH_CGI=@CGI_PREFIX@
 ZM_WEB_USER=@WEB_USER@
 ZM_WEB_GROUP=@WEB_GROUP@
 
-# ZoneMinder database type
+# ZoneMinder database type: so far only mysql is supported
 ZM_DB_TYPE=@ZM_DB_TYPE@
 
 # ZoneMinder database hostname or ip address
